@@ -392,6 +392,10 @@ header .icons #menu-bars {
     left: 1.5rem;
 }
 
+.about {
+    background-color: #f5f5f5;
+}
+
 .about .row {
     display: flex;
     flex-wrap: wrap;
@@ -399,8 +403,9 @@ header .icons #menu-bars {
     align-items: center;
 }
 
-.about .row .image img {
+.about .row #youtube-player {
     width: 100%;
+    align-items: center;
 }
 
 .about .row .content {
@@ -535,8 +540,6 @@ input {
     width: 100%;
     border-radius: 1rem;
     box-shadow: var(--box-shadow);
-    cursor: pointer;
-    overflow: hidden;
     transition: .5s;
 }
 
@@ -549,8 +552,7 @@ input {
 }
 
 .gallery .photo-gallery .pic::before {
-    content: "Photo Gallery";
-    position: absolute;
+    
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

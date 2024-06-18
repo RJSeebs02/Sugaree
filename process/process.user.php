@@ -40,7 +40,7 @@ function create_new_user(){
         /* Pass the parameters to the class function */
         $result = $user->new_user($user_firstname,$user_lastname,$user_name,$user_email,$password);
         if($result){
-            header("location: ../index.php");
+            header("location: ../login_register.php");
         }
     }
 }

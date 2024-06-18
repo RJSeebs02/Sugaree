@@ -229,10 +229,12 @@ if(isset($_POST['register_submit'])){
                         <div class="one">
                             <input type="checkbox" id="register-check">
                             <label for="register-check"> Remember Me</label>
+                            <span>Have an account? <a href="#" onclick="index.php">Login</a></span>
                         </div>
                         <div class="two">
                             <label><a href="#">Terms & Conditions</a> </label>
                         </div>
+                        
                     </div>
                 </div>
             </div>

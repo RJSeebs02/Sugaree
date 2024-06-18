@@ -96,22 +96,53 @@ class User{
 			return $data;	
 		}
 	}
-	/*Function for getting the admin username from the database */
-	function get_username($username){
-		$sql="SELECT adm_username FROM admin WHERE adm_username = :username";	
+	/*Function for getting the user id from the database */
+	function get_user_id($user_identifier){
+		$sql="SELECT user_id FROM tbl_users WHERE user_name = :user_identifier OR user_email = :user_identifier";	
 		$q = $this->conn->prepare($sql);
-		$q->execute(['username' => $username]);
-		$username = $q->fetchColumn();
-		return $username;
+		$q->execute(['user_identifier' => $user_identifier]);
+		$user_id = $q->fetchColumn();
+		return $user_id;
+	}
+	/*Function for getting the admin username from the database */
+	function get_user_name($user_id){
+		$sql="SELECT user_name FROM tbl_users WHERE user_id = :user_id";	
+		$q = $this->conn->prepare($sql);
+		$q->execute(['user_id' => $user_id]);
+		$user_name = $q->fetchColumn();
+		return $user_name;
 	}
 	/*Function for getting the admin password from the database */
-	function get_password($username){
-		$sql="SELECT adm_password FROM admin WHERE adm_username = :username";	
+	function get_user_email($user_id){
+		$sql="SELECT user_email FROM tbl_users WHERE user_id = :user_id";	
 		$q = $this->conn->prepare($sql);
-		$q->execute(['username' => $username]);
-		$password = $q->fetchColumn();
-		return $password;
+		$q->execute(['user_id' => $user_id]);
+		$user_email = $q->fetchColumn();
+		return $user_email;
 	}
+	/*Function for getting the admin password from the database */
+	function get_user_fname($user_id){
+		$sql="SELECT user_firstname FROM tbl_users WHERE user_id = :user_id";	
+		$q = $this->conn->prepare($sql);
+		$q->execute(['user_id' => $user_id]);
+		$user_firstname = $q->fetchColumn();
+		return $user_firstname;
+	}
+	/*Function for getting the admin password from the database */
+	function get_user_lname($user_id){
+		$sql="SELECT user_lastname FROM tbl_users WHERE user_id = :user_id";	
+		$q = $this->conn->prepare($sql);
+		$q->execute(['user_id' => $user_id]);
+		$user_lastname = $q->fetchColumn();
+		return $user_lastname;
+	}
+
+
+
+
+
+
+	
 	/*Function for getting the admin email from the database */
 	function get_email($username){
 		$sql="SELECT adm_email FROM admin WHERE adm_username = :username";	
@@ -171,7 +202,7 @@ class User{
 	/*Function for checking if the user inputs match from that of the database */
 	public function check_login($user_identifier,$user_password){
 		
-		$sql = "SELECT count(*) FROM tbl_users WHERE (user_name = :user_identifier OR user_email = :user_identifier) AND user_password = :user_password"; 
+		$sql = "SELECT count(*) FROM tbl_users WHERE (user_name = :user_identifier OR user_email = :user_identifier) AND user_password = :user_password";
 		$q = $this->conn->prepare($sql);
 		$q->execute(['user_identifier' => $user_identifier,'user_password' => $user_password]);
 		$number_of_rows = $q->fetchColumn();
@@ -179,7 +210,7 @@ class User{
 		if($number_of_rows == 1){
 			
 			$_SESSION['login']=true;
-			$_SESSION['user_name']=$user_identifier;
+			$_SESSION['user_identifier']=$user_identifier;
 			return true;
 		}else{
 			return false;
