@@ -84,22 +84,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <div class='user-details'>
     <p>Welcome <?php echo $user_firstname.' '.$user_lastname?></p>
-    <p> Username: <?php echo $user_name?><br>Email: <?php echo $user_email?></p>
     <form method="POST" action="process/process.user.php?action=update"> <!---Executes process after clicking the update/submit button-->
         <label for="userid"></label>
-        <input type="text" id="userid" class="text" name="userid" value="<?php echo $user_id?>" hidden>
+        <input type="text" id="userid" class="text" name="userid" value="<?php echo $user_id?>" hidden><br>
 
         <label for="username">Username: </label>
-        <input type="text" id="username" class="text" name="username" value="<?php echo $user_name?>" disabled>
-            
+        <input type="text" id="username" class="text" name="username" value="<?php echo $user_name?>" disabled><br>
+
         <label for="email">Email Address: </label>
-		<input type="text" id="email" class="text" name="email" value="<?php echo $user_email?>" disabled>
+        <input type="text" id="email" class="text" name="email" value="<?php echo $user_email?>" disabled><br>
 
         <label for="firstname">First Name: </label>
-		<input type="text" id="firstname" class="text" name="firstname" value="<?php echo $user_firstname?>" placeholder="Enter First Name" required>
+        <input type="text" id="firstname" class="text" name="firstname" value="<?php echo $user_firstname?>" placeholder="Enter First Name" required><br>
 
         <label for="lastname">Last Name: </label>
-		<input type="text" id="lastname" class="text" name="lastname" value="<?php echo $user_lastname?>" placeholder="Enter Last Name" required>
+        <input type="text" id="lastname" class="text" name="lastname" value="<?php echo $user_lastname?>" placeholder="Enter Last Name" required><br>
 
         <input type="submit" value="Update"> <!--Button that passes parameters input to the process file--->
     </form>

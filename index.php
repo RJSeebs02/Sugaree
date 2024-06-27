@@ -360,7 +360,7 @@ if (!empty($videoData['items'])) {
     <div class="box-container">
         <div class="box">
             <h3>locations</h3>
-            <a href="#">Bacolod City</a>
+            <a href="https://maps.app.goo.gl/9VYrGqDbsh3KBwym7" target="_blank">Bacolod City</a>
 
         </div>
 
