@@ -159,6 +159,7 @@ if(isset($_POST['register_submit'])){
                     <div class="input-box">
                         <input type="password" class="input-field" name="password" autocomplete="off" placeholder="Password" required>
                         <i class="bx bx-lock-alt"></i>
+                        <input type="hidden" value="Not yet reviewed" class="text" name="status" placeholder="Not yet reviewed" readonly>
 
                         <script>
                             var myInput = document.getElementById("password");

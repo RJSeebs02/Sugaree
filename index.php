@@ -1,15 +1,32 @@
 <?php
 include 'config/config.php';
+include_once 'class/class.user.php';
+
+$user = new User();
+
+$user_identifier = $_SESSION['user_identifier'];
+$user_id = $user->get_user_id($user_identifier);
+$user_firstname = $user->get_user_fname($user_id);
 
 try {
     $pdo = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_DATABASE, DB_USERNAME, DB_PASSWORD);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $stmtspecialties = $pdo->query("SELECT * FROM tbl_specialties");
-    $specialties = $stmtspecialties->fetchAll(PDO::FETCH_ASSOC);
+    $stmtSpecialties = $pdo->query("SELECT * FROM tbl_specialties");
+    $specialties = $stmtSpecialties->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmtDishes = $pdo->prepare("SELECT * FROM tbl_dishes WHERE dish_popularity = :popularity");
+    $stmtDishes->execute(['popularity' => 'popular']);
+    $dishes = $stmtDishes->fetchAll(PDO::FETCH_ASSOC);
 
     $stmtImages = $pdo->query("SELECT * FROM tbl_images");
     $images = $stmtImages->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmtReviews = $pdo->query("SELECT r.*, u.user_firstname, u.user_lastname 
+                                  FROM tbl_review r 
+                                  INNER JOIN tbl_users u ON r.user_id = u.user_id");
+    $review = $stmtReviews->fetchAll(PDO::FETCH_ASSOC);
+
 } catch (PDOException $e) {
     echo 'Connection failed: ' . $e->getMessage();
     exit();
@@ -111,128 +128,21 @@ if (!empty($videoData['items'])) {
             </div>
         </section>
 
+        <section class="dishes" id="dishes">
+        <h3 class="sub-heading"> Our Dishes </h3>
+        <h3 class="heading"> Popular Dishes </h3>
 
-<section class="dishes"  id="dishes">
-
-
-<h3 class="sub-heading"> Our Dishes </h3>
-<h3 class="heading"> Popular Dishes </h3>
-
-<div class="box-container">
-
-    <div class="box">
-        <a href="#" class="fas fa-heart"></a>
-        <a href="#" class="fas fa-eye"></a>
-        <img src="img/Croissant.png" alt="">
-        <h3>Croissant</h3>
-        <div class="stars">
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star-half-alt"></i>
-        </div>
-        <span>PHP 85.50 </span>
-        <a href="menu.php" class="btn">Go to Menu</a>
-        </div>
-
-        <div class="box">
-            <a href="#" class="fas fa-heart"></a>
-            <a href="#" class="fas fa-eye"></a>
-            <img src="img/Pizza.png" alt="">
-            <h3>Pizza</h3>
-            <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-            </div>
-
-            <span>PHP 399.50 </span>
-            <a href="menu.php" class="btn">Go to Menu</a>
-            </div>
-            <div class="box">
-                <a href="#" class="fas fa-heart"></a>
-                <a href="#" class="fas fa-eye"></a>
-                <img src="img/Gelato.png" alt="">
-                <h3>Gelato</h3>
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                </div>
-                <span>PHP 120.99 </span>
-                <a href="menu.php" class="btn">Go to Menu</a>
-                </div>
+            <div class="box-container">
+                <?php foreach ($dishes as $dish): ?>
                 <div class="box">
-                    <a href="#" class="fas fa-heart"></a>
-                    <a href="#" class="fas fa-eye"></a>
-                    <img src="img/Strawberry.png" alt="">
-                    <h3>Strawberry</h3>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                    <span>PHP 180.99 </span>
-                    <a href="menu.php" class="btn">Go to Menu</a>
-                    </div>
-                    <div class="box">
-                        <a href="#" class="fas fa-heart"></a>
-                        <a href="#" class="fas fa-eye"></a>
-                        <img src="img/Cappucino.png" alt="">
-                        <h3>Cappucino</h3>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
-                        <span>PHP 150.99 </span>
-                        <a href="menu.php" class="btn">Go to Menu</a>
-                        </div>
-                        <div class="box">
-                            <a href="#" class="fas fa-heart"></a>
-                            <a href="#" class="fas fa-eye"></a>
-                            <img src="img/Cupcake.png" alt="">
-                            <h3>Cupcake</h3>
-                            <div class="stars">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <span>PHP 60.50 </span>
-                            <a href="#" class="btn">Go to Menu</a>
-                            </div>
-                            <div class="box">
-                                <a href="#" class="fas fa-heart"></a>
-                                <a href="#" class="fas fa-eye"></a>
-                                <img src="img/Cinnamon.png" alt="">
-                                <h3>Cinnamon</h3>
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </div>
-                                <span>PHP 90.00 </span>
-                                <a href="#" class="btn">Go to Menu</a>
-                                </div>
-                            </div>
-                        
-                        
-    </div>
-</div>
-</section>
+                    <img src="<?php echo htmlspecialchars($dish['dish_img']); ?>" alt="">
+                    <h3><?php echo htmlspecialchars($dish['dish_name']); ?></h3>
+                    <span>₱ <?php echo number_format($dish['dish_price'], 2); ?></span>
+                    <a href="menu.php?category=<?php echo urlencode($dish['dish_category']); ?>" class="btn">Go to Menu</a>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </section>
 
 <section class="about" id="about">
         <h3 class="sub-heading"> About Sugaree </h3>
@@ -250,7 +160,7 @@ if (!empty($videoData['items'])) {
         const player = new YT.Player('youtube-player', {
             height: '750',
             width: '1500',
-            videoId: '48bVT1KD78I', 
+            videoId: 'oC5KWOCHb7g', 
             playerVars: {
                 'autoplay': 0, 
                 'loop': 1,     
@@ -395,127 +305,54 @@ if (!empty($videoData['items'])) {
     </script>
 
 <section class="review" id="review">
-    <h3 class="sub-heading">people's review</h3>
-    <h1 class="heading">what they think</h1>
-    <div class="swiper-container review-slider">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide slide">
-                <i class="fas fa-quote-right"></i>
-                <div class="user">
-                    <img src="img/russ.jpg" alt="">
-                    <div class="user-info">
-                        <h3>Russ Allen Garde</h3>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
+        <h3 class="sub-heading">People's Reviews</h3>
+        <h1 class="heading">What They Think</h1>
+        <div class="swiper-container review-slider">
+            <div class="swiper-wrapper">
+                <?php foreach ($review as $review): ?>
+                    <div class="swiper-slide slide">
+                        <i class="fas fa-quote-right"></i>
+                        <div class="user">
+                            <!-- You can customize the user info based on your database structure -->
+                            <img src="img/user.jpg" alt="">
+                            <div class="user-info">
+                                <h3><?php echo htmlspecialchars($review['user_firstname']); ?></h3>
+                                <div class="stars">
+                                    <?php 
+                                    // Assuming review_rating is a float from 1 to 5
+                                    $rating = floatval($review['review_rating']);
+                                    
+                                    // Determine whole stars (integer part)
+                                    $wholeStars = floor($rating);
+                                    
+                                    // Determine fractional star (if any)
+                                    $fractionalStar = $rating - $wholeStars;
+                                    
+                                    // Display whole stars
+                                    for ($i = 1; $i <= $wholeStars; $i++) {
+                                        echo '<i class="fas fa-star"></i>';
+                                    }
+                                    
+                                    // Display fractional star if needed
+                                    if ($fractionalStar > 0) {
+                                        echo '<i class="fas fa-star-half-alt"></i>'; // or any other half star icon
+                                    }
+                                    
+                                    // Display remaining empty stars (if any)
+                                    $emptyStars = 5 - ceil($rating); // ceil to get the number of empty stars needed
+                                    for ($i = 1; $i <= $emptyStars; $i++) {
+                                        echo '<i class="far fa-star"></i>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
                         </div>
+                        <p><?php echo htmlspecialchars($review['review_content']); ?></p>
                     </div>
-                </div>
-                <p>Their gelato is divine, with a creamy texture and intense flavors. I also love their pizzas - they're thin crust and perfectly baked. 
-                    Whether you're in the mood for gelato or pizza, Sugaree has something delicious for everyone.</p>
-            </div>
-            <div class="swiper-slide slide">
-                <i class="fas fa-quote-right"></i>
-                <div class="user">
-                    <img src="img/rom.jpg" alt="">
-                    <div class="user-info">
-                        <h3>Romeo Seva III</h3>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
-                    </div>
-                </div>
-                <p>Sugaree is my favorite spot to satisfy my sweet cravings in the City. 
-                    Their gelato is top-notch, with flavors that transport you to Italy. The croissants are also amazing - buttery and flaky.</p>
-            </div>
-            <div class="swiper-slide slide">
-                <i class="fas fa-quote-right"></i>
-                <div class="user">
-                    <img src="img/deng.jpg" alt="">
-                    <div class="user-info">
-                        <h3>Andrea Gerome</h3>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                </div>
-                <p>I can't get enough of Sugaree's gelato! It's the perfect treat on a hot day. 
-                    Their pastries, especially the croissants, are also incredible. The atmosphere is cozy, and the staff is always friendly. </p>
-            </div>
-            <div class="swiper-slide slide">
-                <i class="fas fa-quote-right"></i>
-                <div class="user">
-                    <img src="img/juju.jpg" alt="">
-                    <div class="user-info">
-                        <h3>Julianne Silawan</h3>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                </div>
-                <p>Sugaree has become my go-to spot for delicious treats in Bacolod. Their gelato is creamy and rich, and they offer a wide variety of flavors to choose from. T
-                    he croissants are also a must-try - they're baked to perfection! Sugaree never disappoints.</p>
-            </div>
-            <div class="swiper-slide slide">
-                <i class="fas fa-quote-right"></i>
-                <div class="user">
-                    <img src="img/lek2.jpg" alt="">
-                    <div class="user-info">
-                        <h3>Lexxy Lain Villa</h3>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
-                    </div>
-                </div>
-                <p>Sugaree is a hidden gem in Bacolod! Their gelato is out of this world, with unique flavors that you won't find anywhere else. I also love their croissants, which are flaky and buttery.
-                     Whether you're in the mood for gelato or pastries, Sugaree is the place to be!</p>
-            </div>
-            <div class="swiper-slide slide">
-                <i class="fas fa-quote-right"></i>
-                <div class="user">
-                    <img src="img/yna.jpg" alt="">
-                    <div class="user-info">
-                        <h3>Ma. Yna Maurich Gellaco</h3>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
-                    </div>
-                </div>
-                <p>The food is good. It seems like a place out of the 1990s where I can chill and enjoy it's ambience. 
-                    They are also customer-friendly. I recommend this place so much!
-                </p>
+                <?php endforeach; ?>
             </div>
         </div>
-    </div>
-</section>
-</div>
-
-    </div>
-
-</section>
+    </section>
 
 <section class="footer">
 

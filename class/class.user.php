@@ -21,13 +21,13 @@ class User{
     }
 
 	/*Function for creating a new user */
-	public function new_user($user_firstname,$user_lastname,$user_name,$user_email,$password){
+	public function new_user($user_firstname,$user_lastname,$user_name,$user_email,$password,$user_status){
 		
 		$data = [
-			[$user_firstname,$user_lastname,$user_name,$user_email,$password],
+			[$user_firstname,$user_lastname,$user_name,$user_email,$password,$user_status],
 		];
 		/*Stores parameters passed from the creation page inside the database */
-		$stmt = $this->conn->prepare("INSERT INTO tbl_users(user_firstname, user_lastname, user_name, user_email, user_password) VALUES (?,?,?,?,?)");
+		$stmt = $this->conn->prepare("INSERT INTO tbl_users(user_firstname, user_lastname, user_name, user_email, user_password, user_status) VALUES (?,?,?,?,?,?)");
 		try {
 			$this->conn->beginTransaction();
 			foreach ($data as $row)
@@ -44,12 +44,12 @@ class User{
 
 	}
 	/*Function for updating an admin */
-	public function update_admin($username,$password,$email,$fname,$lname,$cnumber,$access){
+	public function update_user($user_id,$user_firstname,$user_lastname){
 		/*Updates data from the database using the parameters passed from the profile updating page */
-		$sql = "UPDATE admin SET adm_password=:adm_password, adm_email=:adm_email, adm_fname=:adm_fname, adm_lname=:adm_lname, adm_cnumber=:adm_cnumber, adm_access=:adm_access WHERE adm_username=:adm_username";
+		$sql = "UPDATE tbl_users SET user_firstname=:user_firstname, user_lastname=:user_lastname WHERE user_id=:user_id";
 
 		$q = $this->conn->prepare($sql);
-		$q->execute(array(':adm_password'=>$password, ':adm_email'=>$email,':adm_fname'=>$fname,':adm_lname'=>$lname,':adm_cnumber'=>$cnumber, ':adm_username'=>$username, ':adm_access'=>$access));
+		$q->execute(array(':user_id'=>$user_id,':user_firstname'=>$user_firstname,':user_lastname'=>$user_lastname));
 		return true;
 	}
 	/*Function for deleting an admin */
@@ -136,60 +136,29 @@ class User{
 		$user_lastname = $q->fetchColumn();
 		return $user_lastname;
 	}
-
-
-
-
-
-
-	
-	/*Function for getting the admin email from the database */
-	function get_email($username){
-		$sql="SELECT adm_email FROM admin WHERE adm_username = :username";	
+	/*Function for getting the admin password from the database */
+	function get_user_review($user_id){
+		$sql="SELECT review_content FROM tbl_review INNER JOIN tbl_users WHERE tbl_review.user_id = tbl_users.user_id AND tbl_users.user_id = :user_id";	
 		$q = $this->conn->prepare($sql);
-		$q->execute(['username' => $username]);
-		$email = $q->fetchColumn();
-		return $email;
+		$q->execute(['user_id' => $user_id]);
+		$user_review = $q->fetchColumn();
+		return $user_review;
 	}
-	/*Function for getting the admin firstname from the database */
-	function get_fname($username){
-		$sql="SELECT adm_fname FROM admin WHERE adm_username = :username";	
+	/*Function for getting the admin password from the database */
+	function get_user_rating($user_id){
+		$sql="SELECT review_rating FROM tbl_review INNER JOIN tbl_users WHERE tbl_review.user_id = tbl_users.user_id AND tbl_users.user_id = :user_id";	
 		$q = $this->conn->prepare($sql);
-		$q->execute(['username' => $username]);
-		$fname = $q->fetchColumn();
-		return $fname;
+		$q->execute(['user_id' => $user_id]);
+		$user_rating = $q->fetchColumn();
+		return $user_rating;
 	}
-	/*Function for getting the admin lastname from the database */
-	function get_lname($username){
-		$sql="SELECT adm_lname FROM admin WHERE adm_username = :username";	
+	/*Function for getting the admin password from the database */
+	function get_user_status($user_id){
+		$sql="SELECT user_status FROM tbl_users WHERE user_id = :user_id";	
 		$q = $this->conn->prepare($sql);
-		$q->execute(['username' => $username]);
-		$lname = $q->fetchColumn();
-		return $lname;
-	}
-	/*Function for getting the admin contact number from the database */
-	function get_cnumber($username){
-		$sql="SELECT adm_cnumber FROM admin WHERE adm_username = :username";	
-		$q = $this->conn->prepare($sql);
-		$q->execute(['username' => $username]);
-		$cnumber = $q->fetchColumn();
-		return $cnumber;
-	}
-	/*Function for getting the admin access level from the database */
-	function get_adm_access($username){
-		$sql="SELECT adm_access FROM admin WHERE adm_username = :username";	
-		$q = $this->conn->prepare($sql);
-		$q->execute(['username' => $username]);
-		$adm_access = $q->fetchColumn();
-		return $adm_access;
-	}
-	/*Function for getting the admin status from the database */
-	function get_adm_status($username){
-		$sql="SELECT adm_status FROM admin WHERE adm_username = :username";	
-		$q = $this->conn->prepare($sql);
-		$q->execute(['username' => $username]);
-		$adm_status = $q->fetchColumn();
-		return $adm_status;
+		$q->execute(['user_id' => $user_id]);
+		$user_status = $q->fetchColumn();
+		return $user_status;
 	}
 	/*Function for getting the session from the database for logging in */
 	function get_session(){
