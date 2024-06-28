@@ -73,5 +73,18 @@ function delete_admin(){
     }
 }
 
+function update_user_image(){
+    $user = new User();
+    /*Receives the parameters passed from the profile updating page form*/
+    $user_id = $_POST['userid'];
+    $user_image = $_POST['image'];
+
+    /Passes the parameters to the class function/
+    $result = $user->update_user($user_id,$user_image);
+    if($result){
+        header("location: ../profile.php");
+    }
+}
+
 
 ?>

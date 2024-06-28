@@ -7,9 +7,12 @@ $user = new User();
 
 /* Checks if the user is logged in */
 if(!$user->get_session()){
-	header("location: login_register.php");
-	exit();
+    header("location: login_register.php");
+    exit();
 }
+
+/*Parameter variables for the navbar*/
+$subpage = (isset($_GET['subpage']) && $_GET['subpage'] != '') ? $_GET['subpage'] : '';
 
 /* Get user logged in details */
 $user_identifier = $_SESSION['user_identifier'];
@@ -24,7 +27,7 @@ $user_status = $user->get_user_status($user_id);
 
 /* Process form submission */
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $review_rating = $_POST['rating'];
+    $review_rating = $_POST['Rating'];
     $review_content = $_POST['content'];
 
     // Basic validation
@@ -62,110 +65,118 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $stmt->close();
         $con->close();
+
+        // Handle image upload
+        if (!empty($_FILES['profile_image']['name'])) {
+            $targetDir = "uploads/";
+            $fileName = basename($_FILES['profile_image']['name']);
+            $targetFilePath = $targetDir . $fileName;
+            $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+
+            // Allow certain file formats
+            $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
+            if (in_array($fileType, $allowTypes)) {
+                // Upload file to server
+                if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $targetFilePath)) {
+                    // Update user image in database
+                    $stmt3 = $con->prepare("UPDATE tbl_users SET user_image = ? WHERE user_id = ?");
+                    $stmt3->bind_param("si", $fileName, $user_id);
+
+                    if ($stmt3->execute()) {
+                        echo "Profile photo updated successfully";
+                        // Update $user_image variable if needed
+                        $user_image = $fileName;
+                    } else {
+                        echo "Error updating profile photo: " . $stmt3->error;
+                    }
+
+                    $stmt3->close();
+                } else {
+                    echo "Error uploading photo.";
+                }
+            } else {
+                echo 'Invalid file format. Allowed types: jpg, jpeg, png, gif';
+            }
+        }
     }
 }
-
 ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+    <link rel="stylesheet" href="css/style4.css"> <!-- Ensure this path is correct -->
 </head>
-<header>
-    <div id="navbar">
-        <div id="navbar-contents">  
-            
-        </div>
-    </div>
-</header>
 <body>
 
-<div class='user-details'>
-    <p>Welcome <?php echo $user_firstname.' '.$user_lastname?></p>
-    <form method="POST" action="process/process.user.php?action=update"> <!---Executes process after clicking the update/submit button-->
-        <label for="userid"></label>
-        <input type="text" id="userid" class="text" name="userid" value="<?php echo $user_id?>" hidden><br>
+<div class="container emp-profile">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-img">
+                    <img src="<?php echo !empty($user_image) ? 'uploads/' . $user_image : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog'; ?>" alt=""/>
 
-        <label for="username">Username: </label>
-        <input type="text" id="username" class="text" name="username" value="<?php echo $user_name?>" disabled><br>
-
-        <label for="email">Email Address: </label>
-        <input type="text" id="email" class="text" name="email" value="<?php echo $user_email?>" disabled><br>
-
-        <label for="firstname">First Name: </label>
-        <input type="text" id="firstname" class="text" name="firstname" value="<?php echo $user_firstname?>" placeholder="Enter First Name" required><br>
-
-        <label for="lastname">Last Name: </label>
-        <input type="text" id="lastname" class="text" name="lastname" value="<?php echo $user_lastname?>" placeholder="Enter Last Name" required><br>
-
-        <input type="submit" value="Update"> <!--Button that passes parameters input to the process file--->
-    </form>
-
-    <a href='logout.php'><button class='btn'>Logout</button></a>
-    <a href='index.php'><button class='btn'>Home</button></a>
+                    <div class="file btn btn-lg btn-primary">
+                        Change Photo
+                        <input type="file" name="profile_image"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+                    <h5><?php echo $user_firstname . ' ' . $user_lastname; ?></h5>
+                    <h6>Web Developer and Designer</h6>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="profile.php?subpage=about" role="tab" aria-controls="home" aria-selected="true">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="review-tab" data-toggle="tab" href="profile.php?subpage=review" role="tab" aria-controls="review" aria-selected="false">Review</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <a href='index.php' class="btn btn-secondary">Home</a> 
+                <a href='logout.php' class="btn btn-secondary">Logout</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-work">
+                    <p>Social Media Links</p>
+                    <a href="">Facebook</a><br/>
+                    <a href="">Twitter</a><br/>
+                    <a href="">Instagram</a>
+                
+                </div>
+            </div>
+            <div class="col-md-8">
+            <?php
+                /*Switch case for the subpage of the Admins Page */
+                switch($subpage){
+                    case 'about':
+                        require_once 'profile-about.php';
+                    break; 
+                    case 'review':
+                        require_once 'review.php';
+                    break; 
+                    default:
+                        require_once 'profile-about.php';
+                    break;
+                }
+            ?>
+            </div>
+        </div>
 </div>
 
-<?php if($user_status == 'Not yet reviewed'){
-?>
 
-<div class="container">
-    <div class="row">
-        <form action="profile.php" method="post" id="reviewForm">
-            <div>
-                <h3>Leave a review!</h3>
-            </div>
-            <div>
-                <label>Comment</label>  
-                <input type="text" name="content" value="<?php echo $user_review?>" required>
-            </div>
-            <div class="rateyo" id="rating" data-rateyo-rating="4" data-rateyo-num-stars="5" data-rateyo-score="3">
-            </div>
-            <span class='result'>rating: 0</span>
-            <input type="hidden" name="rating">
-            <div><input type="submit" name="add_review" value="Submit Review"></div>
-        </form>
-    </div>
-</div>
-
-<?php
-}else{?>
-
-<div class="container">
-    <div class="row">
-        <form action="profile.php" method="post" id="reviewForm">
-            <div>
-                <h3>Leave a review!</h3>
-            </div>
-            <div>
-                <label>Comment</label>  
-                <input type="text" name="content" value="<?php echo $user_review?>" required>
-            </div>
-            <div class="rateyo" id="rating" value="<?php $user_rating?>" data-rateyo-rating="4" data-rateyo-num-stars="5" data-rateyo-score="3">
-            </div>
-            <span class='result'>rating: <?php echo $user_rating?></span>
-            <input type="hidden" name="rating">
-            <div><input type="submit" name="update_review" value="Update Review"></div>
-        </form>
-    </div>
-</div>
-
-<?php
-}
-?>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
-<script>
-$(function () {
-    $(".rateyo").rateYo().on("rateyo.change", function (e, data) {
-        var rating = data.rating;
-        $(this).parent().find('.score').text('score :' + $(this).attr('data-rateyo-score'));
-        $(this).parent().find('.result').text('rating :' + rating);
-        $(this).parent().find('input[name=rating]').val(rating); // add rating value to input field
-    });
-});
-</script>
 
 </body>
 </html>

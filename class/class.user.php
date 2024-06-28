@@ -43,6 +43,15 @@ class User{
 		return true;
 
 	}
+
+	public function update_user_image($user_id,$user_image){
+        /*Updates data from the database using the parameters passed from the profile updating page*/
+        $sql = "UPDATE tbl_users SET user_image=:user_image WHERE user_id=:user_id";
+
+        $q = $this->conn->prepare($sql);
+        $q->execute(array(':user_id'=>$user_id,':user_image'=>$user_image));
+        return true;
+    }
 	/*Function for updating an admin */
 	public function update_user($user_id,$user_firstname,$user_lastname){
 		/*Updates data from the database using the parameters passed from the profile updating page */

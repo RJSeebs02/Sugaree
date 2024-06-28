@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS db_sugaree;
 USE db_sugaree;
-DROP TABLE IF EXISTS `tbl_users`;
-CREATE TABLE `tbl_users` (
+
+CREATE TABLE IF NOT EXISTS `tbl_users` (
   `user_id` int(8) unsigned NOT NULL auto_increment, 
   `user_firstname` varchar(180) NOT NULL default '',
   `user_lastname` varchar(180) NOT NULL default '',
@@ -9,8 +9,10 @@ CREATE TABLE `tbl_users` (
   `user_email` varchar(180) NOT NULL default '',
   `user_password` varchar(180) NOT NULL default '',
   `user_status` varchar(180) NOT NULL default '',
+  `user_image` varchar(180) NOT NULL default '',  
   PRIMARY KEY  (`user_id`)
 );
+
 
 DROP TABLE IF EXISTS `tbl_dishes`;
 CREATE TABLE `tbl_dishes` (
