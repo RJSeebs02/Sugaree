@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
     <div class="col-md-8 offset-md-2">
-        <form action="profile.php?subpage=review" method="post" id="reviewForm">
+        <form action="process/process.review.php?action=new" method="post" id="reviewForm">
         <div class="review-box">
                 <h3>Leave a review!</h3>
             <div>
@@ -14,7 +14,8 @@
             <span class='result'>Rating: <?php echo $user_rating?></span>
             <div class="rateyo" id="Rating" value="<?php $user_rating?>" data-rateyo-rating="4" data-rateyo-num-stars="5" data-rateyo-score="3"></div>
             <input type="hidden" name="Rating">
-            <div><input type="submit" name="update_review" class="btn btn-primary btn-lg" value="Update Review"></div>
+            <input type="hidden" value="<?php echo $user_id?>" name="UserID" readonly>
+            <div><input type="submit" name="update_review" class="btn btn-primary btn-lg" value="Post Review"></div>
         </form>
         </div>
     </div>
@@ -27,17 +28,18 @@
 <div class="container">
     <div class="row">
     <div class="col-md-8 offset-md-2">
-        <form action="profile.php?subpage=review" method="post" id="reviewForm">
+        <form action="process/process.review.php?action=update" method="post" id="reviewForm">
         <div class="review-box">
-                <h3>Leave a review!</h3>
+                <h3>Your Review</h3>
             <div>
                 <label>Comment</label>  
-                <textarea class="form-control review-textarea" name="content" value="<?php echo $user_review?>" required></textarea>
+                <textarea class="form-control review-textarea" name="contentUP" required><?php echo $user_review?></textarea>
             </div>
             <span class='result'>Rating: <?php echo $user_rating?></span>
-            <div class="rateyo" id="Rating" value="<?php $user_rating?>" data-rateyo-rating="4" data-rateyo-num-stars="5" data-rateyo-score="3"></div>
-            <input type="hidden" name="Rating">
-            <div><input type="submit" name="update_review" class="btn btn-primary btn-lg" value="Update Review"></div>
+            <div class="rateyo" id="RatingUP" data-rateyo-rating="<?php echo $user_rating?>" data-rateyo-num-stars="5" data-rateyo-score="3"></div>
+            <input type="hidden" name="RatingUP">
+            <input type="hidden" value="<?php echo $user_id?>" name="UserID" readonly>
+            <div><input type="submit" name="update_review" class="btn btn-primary btn-lg" value="Update Review" ></div>
         </form>
         </div>
     </div>
@@ -54,9 +56,11 @@
 $(function () {
     $(".rateyo").rateYo().on("rateyo.change", function (e, data) {
         var rating = data.rating;
-        $(this).parent().find('.score').text('score :' + $(this).attr('data-rateyo-score'));
-        $(this).parent().find('.result').text('Rating :' + rating);
-        $(this).parent().find('input[name=Rating]').val(rating); // add rating value to input field
+        $(this).parent().find('.result').text('Rating: ' + rating);
+        var hiddenInput = $(this).parent().find('input[name=RatingUP], input[name=Rating]');
+        hiddenInput.val(rating);
+    }).rateYo("option", "rating", function () {
+        return $(this).data("rateyo-rating");
     });
 });
 </script>

@@ -79,7 +79,7 @@ function update_user_image(){
     $user_id = $_POST['userid'];
     $user_image = $_POST['image'];
 
-    /Passes the parameters to the class function/
+    /*Passes the parameters to the class function*/
     $result = $user->update_user($user_id,$user_image);
     if($result){
         header("location: ../profile.php");

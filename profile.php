@@ -25,7 +25,7 @@ $user_review = $user->get_user_review($user_id);
 $user_rating = $user->get_user_rating($user_id);
 $user_status = $user->get_user_status($user_id);
 
-/* Process form submission */
+/* Process form submission 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $review_rating = $_POST['Rating'];
     $review_content = $_POST['content'];
@@ -99,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     }
-}
+}*/
 ?>
 
 <!DOCTYPE html>
