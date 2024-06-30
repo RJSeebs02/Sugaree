@@ -169,6 +169,14 @@ class User{
 		$user_status = $q->fetchColumn();
 		return $user_status;
 	}
+	/*Function for getting the admin password from the database */
+	function get_user_image($user_id){
+		$sql="SELECT user_image FROM tbl_users WHERE user_id = :user_id";	
+		$q = $this->conn->prepare($sql);
+		$q->execute(['user_id' => $user_id]);
+		$user_image = $q->fetchColumn();
+		return $user_image;
+	}
 	/*Function for getting the session from the database for logging in */
 	function get_session(){
 		if(isset($_SESSION['login']) && $_SESSION['login'] == true){

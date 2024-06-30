@@ -64,13 +64,15 @@ VALUES
 
 INSERT into tbl_dishes (`dish_id`, `dish_name`, `dish_img`, `dish_price`, `dish_category`, `dish_popularity`, `dish_calories`, `dish_description`) 
 VALUES 
-(NULL, "Croissant", "https://raw.githubusercontent.com/russgards03/sugaree/main/img/Croissant.png", "89.90", "Pastry", "Popular", "270", "Our croissant is a quintessential French pastry that embodies the art of baking."),
-(NULL, "Pepperoni Pizza", "https://raw.githubusercontent.com/russgards03/sugaree/main/img/Pizza.png", "89.90", "Pizza", "Popular", "300", "Our Pepperoni Pizza is a perennial favorite that combines the perfect balance of spicy, savory, and cheesy goodness."), 
-(NULL, "Cappucino", "https://raw.githubusercontent.com/russgards03/sugaree/main/img/Cappucino.png", "99.99", "Coffee", "Popular", "100", "A classic Italian coffee drink that offers a perfect balance of rich espresso and creamy steamed milk, topped with a thick layer of velvety milk foam."), 
-(NULL, "Cupcake", "https://raw.githubusercontent.com/russgards03/sugaree/main/img/Cupcake.png", "89.90", "Pastry", "Popular", "300", "Delightful, individually-sized treats that combine moist, fluffy cake with a generous swirl of creamy frosting."), 
-(NULL, "Gelato", "https://raw.githubusercontent.com/russgards03/sugaree/main/img/Gelato.png", "89.90", "Gelato", "Popular", "150", "Made with fresh, high-quality ingredients and crafted using traditional methods, our gelato offers intense flavors and a smooth, velvety texture."), 
-(NULL, "Four Cheese Pizza", "https://raw.githubusercontent.com/russgards03/sugaree/main/img/Pizza.png",  "89.90", "Pizza", "Popular", "300", "Each slice offers a harmonious blend of gooey, melted goodness with a crispy, golden edge, creating a mouthwatering experience for cheese lovers."), 
-(NULL, "Strawberry Cake", "https://raw.githubusercontent.com/russgards03/sugaree/main/img/Strawberry.png", "89.90", "Pastry", "Popular", "350", "This cake features layers of moist, fluffy sponge cake infused with the sweet essence of fresh strawberries.");
+(NULL, "Meatballs with Pesto", "img/menu/Appetizers/Meatballs with Pesto.png", "89.90", "Appetizers", "Popular", "270", "Lorem ipsum dolor sit amet"),
+(NULL, "Donut Tiramisu", "img/menu/Donuts/Donut Tiramisu.png", "89.90", "Donuts", "Popular", "300", "Lorem ipsum dolor sit amet"), 
+(NULL, "Glazed Watermelon Donut", "img/menu/Donuts/Glazed Watermelon Donut.png", "99.99", "Donuts", "Popular", "100", "Lorem ipsum dolor sit amet"), 
+(NULL, "Lemon Merengue Donut", "img/menu/Donuts/Lemon Merengue Donut.png", "89.90", "Donuts", "Popular", "300", "Lorem ipsum dolor sit amet"), 
+(NULL, "Eggplant Parm with Mozzarella", "img/menu/Sandwiches/Eggplant Parm with Mozzarella.png", "89.90", "Sandwiches", "Popular", "150", "Lorem ipsum dolor sit amet"), 
+(NULL, "Inasal Cheese Steak", "img/menu/Sandwiches/Inasal Cheese Steak.png",  "89.90", "Sandwiches", "Popular", "300", "Lorem ipsum dolor sit amet"), 
+(NULL, "Meatball Parm with Mozzarella", "img/menu/Sandwiches/Meatball Parm with Mozzarella.png", "89.90", "Sandwiches", "Popular", "350", "Lorem ipsum dolor sit amet"),
+(NULL, "Philly Cheese Steak", "img/menu/Sandwiches/Philly Cheese Steak.png",  "89.90", "Sandwiches", "Popular", "300", "Lorem ipsum dolor sit amet"),
+(NULL, "Salisbury Italian Roast Pork with Spinach and Provolone Cheese", "img/menu/Sandwiches/Salisbury Italian Roast Pork with Spinach and Provolone Cheese.png",  "89.90", "Sandwiches", "Popular", "300", "Lorem ipsum dolor sit amet");
 ;
 
 INSERT INTO tbl_images (`image_src`, `image_alt`, `image_category`)

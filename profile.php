@@ -24,6 +24,7 @@ $user_lastname = $user->get_user_lname($user_id);
 $user_review = $user->get_user_review($user_id);
 $user_rating = $user->get_user_rating($user_id);
 $user_status = $user->get_user_status($user_id);
+$user_image = $user->get_user_image($user_id);
 
 ?>
 
@@ -93,7 +94,7 @@ $user_status = $user->get_user_status($user_id);
     <div class="row">
         <div class="col-md-4">
             <div class="profile-img">
-                <img src="<?php echo !empty($user_image) ? 'uploads/' . $user_image : 'https://raw.githubusercontent.com/RJSeebs02/sugaree_img/main/defaultpic.jpg'; ?>" alt=""/>
+                <img src="<?php echo !empty($user_image) ? 'uploads/' . $user_image : 'https://raw.githubusercontent.com/RJSeebs02/sugaree_img/main/defaultpic.jpg'; ?>" alt="User Image"/>
                 
                 <button id="openPopupBtn" class="btn btn-primary">Change Image</button>
             </div>
@@ -208,7 +209,8 @@ $user_status = $user->get_user_status($user_id);
         // Assuming the form handling is done via PHP
         var formData = new FormData();
         formData.append('profile_image', imageUpload.files[0]);
-        formData.append('user_id', '<?php echo $user_id; ?>'); // Pass user ID
+        formData.append('user_id', '<?php echo $user_id; ?>');
+
 
         $.ajax({
             url: 'profile.php',

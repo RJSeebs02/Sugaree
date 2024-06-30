@@ -67,21 +67,17 @@ try {
                                         <img src="assets/images/menu-1.png" alt="">
                                         <a href="?category=">All Dishes</a>
                                     </li>
-                                    <li class="filter" data-filter=".pastry">
+                                    <li class="filter" data-filter=".appetizers">
                                         <img src="assets/images/menu-2.png" alt="">
-                                        <a href="?category=Pastry">Pastry</a>
+                                        <a href="?category=Appetizers">Appetizers</a>
                                     </li>
-                                    <li class="filter" data-filter=".coffee">
+                                    <li class="filter" data-filter=".donuts">
+                                        <img src="assets/images/menu-2.png" alt="">
+                                        <a href="?category=Donuts">Donuts</a>
+                                    </li>
+                                    <li class="filter" data-filter=".sandwiches">
                                         <img src="assets/images/menu-3.png" alt="">
-                                        <a href="?category=Coffee">Coffee</a>
-                                    </li>
-                                    <li class="filter" data-filter=".pizza">
-                                        <img src="assets/images/menu-4.png" alt="">
-                                        <a href="?category=Pizza">Pizza</a>
-                                    </li>
-                                    <li class="filter" data-filter=".gelato">
-                                        <img src="assets/images/menu-5.png" alt="">
-                                        <a href="?category=Gelato">Gelato</a>
+                                        <a href="?category=Sandwiches">Sandwiches</a>
                                     </li>
                                     <li class="filter" data-filter=".home">
                                         <img src="assets/images/menu-6.png" alt="">
