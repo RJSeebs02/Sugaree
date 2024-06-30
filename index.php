@@ -314,7 +314,7 @@ if (!empty($videoData['items'])) {
                         <i class="fas fa-quote-right"></i>
                         <div class="user">
                             <!-- You can customize the user info based on your database structure -->
-                            <img src="img/user.jpg" alt="">
+                            <img src="https://raw.githubusercontent.com/RJSeebs02/sugaree_img/main/defaultpic.jpg" alt="">
                             <div class="user-info">
                                 <h3><?php echo htmlspecialchars($review['user_firstname']); ?></h3>
                                 <div class="stars">
