@@ -4,7 +4,13 @@ include_once 'class/class.user.php';
 
 $user = new User();
 
-$user_identifier = $_SESSION['user_identifier'];
+/* Checks if the user is logged in */
+if(!$user->get_session()){
+    $user_identifier = "N/A";
+} else {
+    $user_identifier = $_SESSION['user_identifier'];
+}
+
 $user_id = $user->get_user_id($user_identifier);
 $user_firstname = $user->get_user_fname($user_id);
 
@@ -80,6 +86,7 @@ if (!empty($videoData['items'])) {
                         <a href="#"><img src="img/grab.png" alt="Grab Logo" class="logo"> Grab</a>
                         <a href="#"><img src="img/foodpanda.png" alt="FoodPanda Logo" class="logo"> FoodPanda</a>
                         <a href="https://www.facebook.com/EboyRiderOfficialPage" target="_blank"><img src="img/eboy.jpg" alt="Eboy Logo" class="logo"> Eboy</a>
+                        <a href="#"><img src="img/logo.png" alt="Eboy Logo" class="logo"> Pick-Up</a>
                     </div>
                 </div>
             </nav>
@@ -137,7 +144,6 @@ if (!empty($videoData['items'])) {
                 <div class="box">
                     <img src="<?php echo htmlspecialchars($dish['dish_img']); ?>" alt="">
                     <h3><?php echo htmlspecialchars($dish['dish_name']); ?></h3>
-                    <span>₱ <?php echo number_format($dish['dish_price'], 2); ?></span>
                     <a href="menu.php?category=<?php echo urlencode($dish['dish_category']); ?>" class="btn">Go to Menu</a>
                 </div>
                 <?php endforeach; ?>
@@ -305,54 +311,68 @@ if (!empty($videoData['items'])) {
     </script>
 
 <section class="review" id="review">
-        <h3 class="sub-heading">People's Reviews</h3>
-        <h1 class="heading">What They Think</h1>
-        <div class="swiper-container review-slider">
-            <div class="swiper-wrapper">
-                <?php foreach ($review as $review): ?>
-                    <div class="swiper-slide slide">
-                        <i class="fas fa-quote-right"></i>
-                        <div class="user">
-                            <!-- You can customize the user info based on your database structure -->
-                            <img src="https://raw.githubusercontent.com/RJSeebs02/sugaree_img/main/defaultpic.jpg" alt="">
-                            <div class="user-info">
-                                <h3><?php echo htmlspecialchars($review['user_firstname']); ?></h3>
-                                <div class="stars">
-                                    <?php 
-                                    // Assuming review_rating is a float from 1 to 5
-                                    $rating = floatval($review['review_rating']);
-                                    
-                                    // Determine whole stars (integer part)
-                                    $wholeStars = floor($rating);
-                                    
-                                    // Determine fractional star (if any)
-                                    $fractionalStar = $rating - $wholeStars;
-                                    
-                                    // Display whole stars
-                                    for ($i = 1; $i <= $wholeStars; $i++) {
-                                        echo '<i class="fas fa-star"></i>';
-                                    }
-                                    
-                                    // Display fractional star if needed
-                                    if ($fractionalStar > 0) {
-                                        echo '<i class="fas fa-star-half-alt"></i>'; // or any other half star icon
-                                    }
-                                    
-                                    // Display remaining empty stars (if any)
-                                    $emptyStars = 5 - ceil($rating); // ceil to get the number of empty stars needed
-                                    for ($i = 1; $i <= $emptyStars; $i++) {
-                                        echo '<i class="far fa-star"></i>';
-                                    }
-                                    ?>
-                                </div>
+    <h3 class="sub-heading">People's Reviews</h3>
+    <h1 class="heading">What They Think</h1>
+    <div class="swiper-container review-slider">
+        <div class="swiper-wrapper">
+            <?php foreach ($review as $review): ?>
+                <div class="swiper-slide slide">
+                    <i class="fas fa-quote-right"></i>
+                    <div class="user">
+                        <?php
+                        // Fetch user image path based on user_id from the review
+                        $reviewer_id = $review['user_id'];
+                        $res = mysqli_query($con, "SELECT user_image FROM tbl_users WHERE user_id = $reviewer_id");
+                        if ($res && mysqli_num_rows($res) > 0) {
+                            $row = mysqli_fetch_assoc($res);
+                            $user_image_path = 'img/' . $row['user_image'];
+                            if (file_exists($user_image_path)) {
+                                echo '<img src="' . $user_image_path . '" alt="">';
+                            } else {
+                                echo '<p>Image not found: ' . htmlspecialchars($user_image_path) . '</p>';
+                            }
+                        } else {
+                            echo '<p>No image found for this reviewer.</p>';
+                        }
+                        ?>
+                        <div class="user-info">
+                            <h3><?php echo htmlspecialchars($review['user_firstname']); ?></h3>
+                            <div class="stars">
+                                <?php 
+                                // Assuming review_rating is a float from 1 to 5
+                                $rating = floatval($review['review_rating']);
+                                
+                                // Determine whole stars (integer part)
+                                $wholeStars = floor($rating);
+                                
+                                // Determine fractional star (if any)
+                                $fractionalStar = $rating - $wholeStars;
+                                
+                                // Display whole stars
+                                for ($i = 1; $i <= $wholeStars; $i++) {
+                                    echo '<i class="fas fa-star"></i>';
+                                }
+                                
+                                // Display fractional star if needed
+                                if ($fractionalStar > 0) {
+                                    echo '<i class="fas fa-star-half-alt"></i>'; // or any other half star icon
+                                }
+                                
+                                // Display remaining empty stars (if any)
+                                $emptyStars = 5 - ceil($rating); // ceil to get the number of empty stars needed
+                                for ($i = 1; $i <= $emptyStars; $i++) {
+                                    echo '<i class="far fa-star"></i>';
+                                }
+                                ?>
                             </div>
                         </div>
-                        <p><?php echo htmlspecialchars($review['review_content']); ?></p>
                     </div>
-                <?php endforeach; ?>
-            </div>
+                    <p><?php echo htmlspecialchars($review['review_content']); ?></p>
+                </div>
+            <?php endforeach; ?>
         </div>
-    </section>
+    </div>
+</section>
 
 <section class="footer">
 
